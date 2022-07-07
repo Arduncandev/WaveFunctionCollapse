@@ -1,64 +1,38 @@
 const tiles = [];
+const tileImages = [];
 
 let grid = [];
 
 const DIM = 20;
 
-const BLANK = 0;
-const NORTH = 1;
-const EAST = 2;
-const SOUTH = 3;
-const WEST = 4;
-
-const rules = [
-  [
-    [BLANK, NORTH],
-    [BLANK, EAST],
-    [BLANK, SOUTH],
-    [BLANK, WEST],
-  ],
-  [
-    [EAST, WEST, SOUTH],
-    [WEST, NORTH, SOUTH],
-    [BLANK, SOUTH],
-    [EAST, NORTH, SOUTH],
-  ],
-  [
-    [EAST, WEST, SOUTH],
-    [WEST, NORTH, SOUTH],
-    [EAST, WEST, NORTH],
-    [BLANK, WEST],
-  ],
-  [
-    [BLANK, NORTH],
-    [WEST, NORTH, SOUTH],
-    [EAST, WEST, NORTH],
-    [EAST, NORTH, SOUTH],
-  ],
-  [
-    [EAST, WEST, SOUTH],
-    [BLANK, EAST],
-    [EAST, WEST, NORTH],
-    [NORTH, SOUTH, EAST],
-  ],
-];
-
 function preload() {
-  tiles[0] = loadImage("tiles/pipes/blank.png");
-  tiles[1] = loadImage("tiles/pipes/north.png");
-  tiles[2] = loadImage("tiles/pipes/east.png");
-  tiles[3] = loadImage("tiles/pipes/south.png");
-  tiles[4] = loadImage("tiles/pipes/west.png");
+  const path = "tiles/pipes";
+  tileImages[0] = loadImage(`${path}/blank.png`);
+  tileImages[1] = loadImage(`${path}/north.png`);
+  //   tiles[2] = loadImage(`${path}/east.png`);
+  //   tiles[3] = loadImage(`${path}/south.png`);
+  //   tiles[4] = loadImage(`${path}/west.png`);
 }
 
 function setup() {
   createCanvas(800, 800);
 
+  //loaded tiles
+  tiles[0] = new Tile(tileImages[0], [0, 0, 0, 0]);
+  tiles[1] = new Tile(tileImages[1], [1, 1, 0, 1]);
+  tiles[2] = tiles[1].rotate(1);
+  tiles[3] = tiles[1].rotate(2);
+  tiles[4] = tiles[1].rotate(3);
+
+  // Generate adjacency rules
+  for (let i = 0; i < tiles.length; i++) {
+    const tile = tiles[i];
+    tile.analyze(tiles);
+  }
+
+  // made a cell for each spot on the grid
   for (let i = 0; i < DIM * DIM; i++) {
-    grid[i] = {
-      collapsed: false,
-      options: [BLANK, NORTH, EAST, SOUTH, WEST],
-    };
+    grid[i] = new Cell(tiles.length);
   }
 }
 
@@ -71,10 +45,6 @@ function checkValid(arr, valid) {
   }
 }
 
-// function mousePressed() {
-//   redraw();
-// }
-
 function draw() {
   background(0);
 
@@ -86,7 +56,7 @@ function draw() {
       let cell = grid[j + i * DIM];
       if (cell.collapsed) {
         let index = cell.options[0];
-        image(tiles[index], j * w, i * h, w, h);
+        image(tiles[index].img, j * w, i * h, w, h);
       } else {
         fill(0);
         stroke(255);
@@ -131,14 +101,14 @@ function draw() {
       if (grid[index].collapsed) {
         nextGrid[index] = grid[index];
       } else {
-        let options = [BLANK, NORTH, EAST, SOUTH, WEST];
+        let options = new Array(tiles.length).fill(0).map((x, i) => i);
 
         //check north
         if (i > 0) {
           let north = grid[j + (i - 1) * DIM];
           let validOptions = [];
           for (let option of north.options) {
-            let valid = rules[option][2];
+            let valid = tiles[option].south;
             validOptions = validOptions.concat(valid);
           }
           checkValid(options, validOptions);
@@ -151,7 +121,7 @@ function draw() {
           for (let option of east.options) {
             //            console.log(rules[option][3]);
 
-            let valid = rules[option][3];
+            let valid = tiles[option].west;
             validOptions = validOptions.concat(valid);
           }
           checkValid(options, validOptions);
@@ -162,7 +132,7 @@ function draw() {
           let south = grid[j + (i + 1) * DIM];
           let validOptions = [];
           for (let option of south.options) {
-            let valid = rules[option][0];
+            let valid = tiles[option].north;
             validOptions = validOptions.concat(valid);
           }
           checkValid(options, validOptions);
@@ -173,16 +143,13 @@ function draw() {
           let west = grid[j - 1 + i * DIM];
           let validOptions = [];
           for (let option of west.options) {
-            let valid = rules[option][1];
+            let valid = tiles[option].east;
             validOptions = validOptions.concat(valid);
           }
           checkValid(options, validOptions);
         }
 
-        nextGrid[index] = {
-          options,
-          collapsed: false,
-        };
+        nextGrid[index] = new Cell(options);
       }
     }
   }
