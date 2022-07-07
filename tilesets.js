@@ -139,6 +139,6 @@ var rail = {
     ["ABA", "AAA", "ABA", "AAA"],
     ["ABA", "ABA", "ABA", "ABA"],
   ],
-  tileRotations: [false, true, true, true, true, true, true],
+  tileRotations: [false, true, true, true, true, true, false],
   path: "tiles/rail",
 };

@@ -3,7 +3,14 @@
   <head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Wave Function Collapse</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
     <style>
       body {
         background-color: #555;
@@ -13,10 +20,112 @@
 
   <body>
     <main></main>
+    <div>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('rail')"
+        type="submit"
+      >
+        Rail
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('roads')"
+        type="submit"
+      >
+        Roads
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('polka')"
+        type="submit"
+      >
+        Polka
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('pipes')"
+        type="submit"
+      >
+        Pipes
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('demo')"
+        type="submit"
+      >
+        Simple Lines
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('demoTracks')"
+        type="submit"
+      >
+        Simple Rail
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('mountains')"
+        type="submit"
+      >
+        Mountains
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('circuit')"
+        type="submit"
+      >
+        Green Circuit Board
+      </button>
+      <button
+        class="btn btn-info"
+        onclick="chooseTileSet('circuitCodingTrain')"
+        type="submit"
+      >
+        Purple Circuit Board
+      </button>
+    </div>
+    <div class="col-lg-6">
+      <h4>
+        <span class="label label-success">Dimensions</span>
+      </h4>
+    </div>
+    <div class="col-lg-6">
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button
+            class="btn btn-success"
+            onclick="chooseDimensions()"
+            type="button"
+          >
+            Go!
+          </button>
+        </span>
+
+        <input
+          type="text"
+          id="dimension"
+          class="form-control"
+          placeholder="10"
+        />
+      </div>
+      <!-- /input-group -->
+    </div>
 
     <script src="tilesets.js"></script>
     <script src="waveFunc.js"></script>
     <script src="tile.js"></script>
     <script src="cell.js"></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js"
+      integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js"
+      integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

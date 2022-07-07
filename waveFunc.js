@@ -3,19 +3,49 @@ const tileImages = [];
 
 let grid = [];
 
-const DIM = 10;
 //Available tilesets: circuit, mountains, demo, demoTracks, circuitCodingTrain, pipes
 //                    polka, roads, rail
-var tileSet = rail;
+console.log(
+  sessionStorage.getItem("tileset") === null &&
+    sessionStorage.getItem("dimension") === null
+);
+
+if (
+  sessionStorage.getItem("tileset") === null ||
+  sessionStorage.getItem("dimension") === null
+) {
+  sessionStorage.setItem("tileset", "circuit");
+  sessionStorage.setItem("dimension", "10");
+}
+console.log(sessionStorage.getItem("dimension"));
+const DIM = eval(sessionStorage.getItem("dimension"));
+var tileSet = eval(sessionStorage.getItem("tileset"));
 
 function preload() {
   for (let i = 0; i < tileSet.numberOfTiles; i++) {
     tileImages[i] = loadImage(`${tileSet.path}/${i}.png`);
   }
+
+  console.log(tileImages);
+}
+
+function chooseDimensions() {
+  if (eval(document.getElementById("dimension").value) > 0) {
+    sessionStorage.setItem(
+      "dimension",
+      document.getElementById("dimension").value
+    );
+    location.reload();
+  }
+}
+
+function chooseTileSet(set) {
+  sessionStorage.setItem("tileset", set);
+  location.reload();
 }
 
 function setup() {
-  createCanvas(800, 800);
+  createCanvas(950, 800);
 
   for (var i = 0; i < tileSet.numberOfTiles; i++) {
     tiles[i] = new Tile(tileImages[i], tileSet.tileConnections[i]);
@@ -39,6 +69,7 @@ function setup() {
 
 function startOver() {
   // made a cell for each spot on the grid
+
   for (let i = 0; i < DIM * DIM; i++) {
     grid[i] = new Cell(tiles.length);
   }
